@@ -1,0 +1,26 @@
+version: v1
+
+plugins:
+  - name: prost
+    out: src
+    opt:
+      - compile_well_known_types
+      - extern_path=.google.protobuf=::pbjson_types
+      # - bytes=.
+      # - file_descriptor_set
+
+  - name: prost-serde
+    out: src
+
+  - name: tonic
+    out: src
+    opt:
+      - compile_well_known_types
+      - extern_path=.google.protobuf=::pbjson_types
+
+  - name: prost-crate
+    out: .
+    strategy: all
+    opt:
+      - no_features
+      - gen_crate=Cargo.toml
