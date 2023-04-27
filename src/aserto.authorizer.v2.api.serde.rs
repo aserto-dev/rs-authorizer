@@ -31,6 +31,9 @@ impl serde::Serialize for Decision {
         if !self.annotations.is_empty() {
             len += 1;
         }
+        if self.tenant_id.is_some() {
+            len += 1;
+        }
         let mut struct_ser = serializer.serialize_struct("aserto.authorizer.v2.api.Decision", len)?;
         if !self.id.is_empty() {
             struct_ser.serialize_field("id", &self.id)?;
@@ -56,6 +59,9 @@ impl serde::Serialize for Decision {
         if !self.annotations.is_empty() {
             struct_ser.serialize_field("annotations", &self.annotations)?;
         }
+        if let Some(v) = self.tenant_id.as_ref() {
+            struct_ser.serialize_field("tenantId", v)?;
+        }
         struct_ser.end()
     }
 }
@@ -74,6 +80,8 @@ impl<'de> serde::Deserialize<'de> for Decision {
             "outcomes",
             "resource",
             "annotations",
+            "tenant_id",
+            "tenantId",
         ];
 
         #[allow(clippy::enum_variant_names)]
@@ -86,6 +94,7 @@ impl<'de> serde::Deserialize<'de> for Decision {
             Outcomes,
             Resource,
             Annotations,
+            TenantId,
         }
         impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> std::result::Result<GeneratedField, D::Error>
@@ -115,6 +124,7 @@ impl<'de> serde::Deserialize<'de> for Decision {
                             "outcomes" => Ok(GeneratedField::Outcomes),
                             "resource" => Ok(GeneratedField::Resource),
                             "annotations" => Ok(GeneratedField::Annotations),
+                            "tenantId" | "tenant_id" => Ok(GeneratedField::TenantId),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -142,6 +152,7 @@ impl<'de> serde::Deserialize<'de> for Decision {
                 let mut outcomes__ = None;
                 let mut resource__ = None;
                 let mut annotations__ = None;
+                let mut tenant_id__ = None;
                 while let Some(k) = map.next_key()? {
                     match k {
                         GeneratedField::Id => {
@@ -196,6 +207,12 @@ impl<'de> serde::Deserialize<'de> for Decision {
                                 map.next_value::<std::collections::HashMap<_, _>>()?
                             );
                         }
+                        GeneratedField::TenantId => {
+                            if tenant_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("tenantId"));
+                            }
+                            tenant_id__ = map.next_value()?;
+                        }
                     }
                 }
                 Ok(Decision {
@@ -207,6 +224,7 @@ impl<'de> serde::Deserialize<'de> for Decision {
                     outcomes: outcomes__.unwrap_or_default(),
                     resource: resource__,
                     annotations: annotations__.unwrap_or_default(),
+                    tenant_id: tenant_id__,
                 })
             }
         }
@@ -236,6 +254,9 @@ impl serde::Serialize for DecisionPolicy {
         if !self.registry_digest.is_empty() {
             len += 1;
         }
+        if self.policy_instance.is_some() {
+            len += 1;
+        }
         let mut struct_ser = serializer.serialize_struct("aserto.authorizer.v2.api.DecisionPolicy", len)?;
         if let Some(v) = self.context.as_ref() {
             struct_ser.serialize_field("context", v)?;
@@ -251,6 +272,9 @@ impl serde::Serialize for DecisionPolicy {
         }
         if !self.registry_digest.is_empty() {
             struct_ser.serialize_field("registryDigest", &self.registry_digest)?;
+        }
+        if let Some(v) = self.policy_instance.as_ref() {
+            struct_ser.serialize_field("policyInstance", v)?;
         }
         struct_ser.end()
     }
@@ -271,6 +295,8 @@ impl<'de> serde::Deserialize<'de> for DecisionPolicy {
             "registryTag",
             "registry_digest",
             "registryDigest",
+            "policy_instance",
+            "policyInstance",
         ];
 
         #[allow(clippy::enum_variant_names)]
@@ -280,6 +306,7 @@ impl<'de> serde::Deserialize<'de> for DecisionPolicy {
             RegistryImage,
             RegistryTag,
             RegistryDigest,
+            PolicyInstance,
         }
         impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> std::result::Result<GeneratedField, D::Error>
@@ -306,6 +333,7 @@ impl<'de> serde::Deserialize<'de> for DecisionPolicy {
                             "registryImage" | "registry_image" => Ok(GeneratedField::RegistryImage),
                             "registryTag" | "registry_tag" => Ok(GeneratedField::RegistryTag),
                             "registryDigest" | "registry_digest" => Ok(GeneratedField::RegistryDigest),
+                            "policyInstance" | "policy_instance" => Ok(GeneratedField::PolicyInstance),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -330,6 +358,7 @@ impl<'de> serde::Deserialize<'de> for DecisionPolicy {
                 let mut registry_image__ = None;
                 let mut registry_tag__ = None;
                 let mut registry_digest__ = None;
+                let mut policy_instance__ = None;
                 while let Some(k) = map.next_key()? {
                     match k {
                         GeneratedField::Context => {
@@ -362,6 +391,12 @@ impl<'de> serde::Deserialize<'de> for DecisionPolicy {
                             }
                             registry_digest__ = Some(map.next_value()?);
                         }
+                        GeneratedField::PolicyInstance => {
+                            if policy_instance__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("policyInstance"));
+                            }
+                            policy_instance__ = map.next_value()?;
+                        }
                     }
                 }
                 Ok(DecisionPolicy {
@@ -370,6 +405,7 @@ impl<'de> serde::Deserialize<'de> for DecisionPolicy {
                     registry_image: registry_image__.unwrap_or_default(),
                     registry_tag: registry_tag__.unwrap_or_default(),
                     registry_digest: registry_digest__.unwrap_or_default(),
+                    policy_instance: policy_instance__,
                 })
             }
         }

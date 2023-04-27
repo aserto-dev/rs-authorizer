@@ -42,6 +42,15 @@ impl IdentityType {
         }
     }
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PolicyInstance {
+    /// policy name
+    #[prost(string, tag="1")]
+    pub name: ::prost::alloc::string::String,
+    /// label identifying the instance of the policy
+    #[prost(string, tag="2")]
+    pub instance_label: ::prost::alloc::string::String,
+}
 /// represents a decision that an authorizer performed in the past
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Decision {
@@ -69,6 +78,9 @@ pub struct Decision {
     /// annotations that may be added to a decision    
     #[prost(map="string, string", tag="8")]
     pub annotations: ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
+    /// id of the tenant that generated the decision
+    #[prost(string, optional, tag="9")]
+    pub tenant_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 /// information about a user on behalf of whom a decision was made
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -101,6 +113,9 @@ pub struct DecisionPolicy {
     /// digest of the policy image 
     #[prost(string, tag="5")]
     pub registry_digest: ::prost::alloc::string::String,
+    /// policy instance used in decision
+    #[prost(message, optional, tag="6")]
+    pub policy_instance: ::core::option::Option<PolicyInstance>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Module {
@@ -114,15 +129,6 @@ pub struct Module {
     pub ast: ::core::option::Option<::pbjson_types::Value>,
     #[prost(string, optional, tag="5")]
     pub package_root: ::core::option::Option<::prost::alloc::string::String>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct PolicyInstance {
-    /// policy name
-    #[prost(string, tag="1")]
-    pub name: ::prost::alloc::string::String,
-    /// label identifying the instance of the policy
-    #[prost(string, tag="2")]
-    pub instance_label: ::prost::alloc::string::String,
 }
 include!("aserto.authorizer.v2.api.serde.rs");
 // @@protoc_insertion_point(module)
