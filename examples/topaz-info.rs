@@ -6,7 +6,7 @@ use aserto_authorizer::aserto::authorizer::v2::{authorizer_client::AuthorizerCli
 use tonic::transport::{Certificate, Channel, ClientTlsConfig, Identity};
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {    
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let certs_dir = dirs::home_dir().unwrap().join(".config").join("topaz").join("certs");
 
     let server_root_ca_cert = tokio::fs::read(certs_dir.join("grpc-ca.crt")).await?;
@@ -22,7 +22,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .ca_certificate(server_root_ca_cert)
         .identity(client_identity);
 
-    let channel = Channel::builder("http://0.0.0.0:8282".parse().unwrap())
+    let channel = Channel::builder("https://0.0.0.0:8282".parse().unwrap())
         .tls_config(tls)?
         .connect()
         .await?;
@@ -36,5 +36,5 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dbg!(response);
 
     Ok(())
-    
+
 }
